@@ -1,3 +1,40 @@
+// import { useContext } from "react";
+// import api from "../api/axios";
+// import { AuthContext } from "../context/AuthContext";
+
+// export default function AnswerList({ answers, reload }) {
+//   const { auth } = useContext(AuthContext);
+
+//   const deleteAnswer = async (id) => {
+//     await api.delete(`/admin/answer/${id}`);
+//     reload();
+//   };
+
+//   return (
+//     <div className="mt-3 space-y-2">
+//       {answers.map((a) => (
+//         <div
+//           key={a._id}
+//           className="bg-gray-50 p-2 rounded text-sm flex justify-between"
+//         >
+//           <span>{a.text}</span>
+
+//           {auth.role === "admin" && (
+//             <button
+//               onClick={() => deleteAnswer(a._id)}
+//               className="text-red-500 text-xs"
+//             >
+//               Delete
+//             </button>
+//           )}
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }
+
+
+
 import { useContext } from "react";
 import api from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
@@ -6,23 +43,27 @@ export default function AnswerList({ answers, reload }) {
   const { auth } = useContext(AuthContext);
 
   const deleteAnswer = async (id) => {
-    await api.delete(`/admin/answer/${id}`);
-    reload();
+    try {
+      await api.delete(`/admin/answer/${id}`);
+      reload();
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+    }
   };
 
   return (
-    <div className="mt-3 space-y-2">
-      {answers.map((a) => (
+    <div className="mt-2 space-y-2">
+      {answers.map((ans) => (
         <div
-          key={a._id}
-          className="bg-gray-50 p-2 rounded text-sm flex justify-between"
+          key={ans._id}
+          className="bg-gray-100 px-3 py-2 rounded flex justify-between items-start"
         >
-          <span>{a.text}</span>
+          <span className="text-sm">{ans.text}</span>
 
-          {auth.role === "admin" && (
+          {auth?.user?.role === "admin" && (
             <button
-              onClick={() => deleteAnswer(a._id)}
-              className="text-red-500 text-xs"
+              onClick={() => deleteAnswer(ans._id)}
+              className="text-red-500 text-xs ml-2"
             >
               Delete
             </button>
