@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import LpuLogo from "./LPU_logo.png";
 
 export default function Navbar({ onAsk, search, setSearch }) {
   const { auth, logout } = useContext(AuthContext);
@@ -7,7 +8,17 @@ export default function Navbar({ onAsk, search, setSearch }) {
   return (
     <nav className="bg-white border-b-2 border-orange-500 fixed w-full top-0 z-50">
       <div className="max-w-6xl mx-auto flex items-center justify-between p-3 gap-3">
-        <h1 className="text-xl font-bold text-orange-500">LPU Quora</h1>
+        {/* <h1 className="text-xl font-bold text-orange-500">LPU Quora</h1> */}
+<div className="flex items-center gap-2">
+  <img
+    src={LpuLogo}
+    alt="LPU Logo"
+    className="h-10 w-10 object-contain"
+  />
+  <h1 className="text-xl font-bold text-orange-500">
+    LPU Quora
+  </h1>
+</div>
 
         <input
           value={search}
