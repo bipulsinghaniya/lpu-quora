@@ -60,26 +60,19 @@
 
 
 
-
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://lpuquora-backend.onrender.com/api", 
+  baseURL: "https://lpuquora-backend.onrender.com/api",
   withCredentials: true,
 });
 
-api.interceptors.request.use(
-  (config) => {
-    const auth = JSON.parse(localStorage.getItem("auth"));
-    const token = auth?.token;
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+api.interceptors.request.use((req) => {
+  const auth = JSON.parse(localStorage.getItem("auth"));
+  if (auth?.token) {
+    req.headers.Authorization = `Bearer ${auth.token}`;
+  }
+  return req;
+});
 
 export default api;
