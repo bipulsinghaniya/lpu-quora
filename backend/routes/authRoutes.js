@@ -1,21 +1,20 @@
+
+
 // const router = require("express").Router();
 // const { register, login } = require("../controllers/authController");
-// const {
-//   registerValidator,
-//   loginValidator
-// } = require("../utils/validator");
 
-// router.post("/register", registerValidator, register);
-// router.post("/login", loginValidator, login);
+// router.post("/register", register);
+// router.post("/login", login);
 
 // module.exports = router;
 
 
-const router = require("express").Router();
-const { register, login } = require("../controllers/authController");
 
+/// mai 
+
+const router = require("express").Router();
+const { register, login, verifyEmail } = require("../controllers/authController");
+router.get("/verify/:token", verifyEmail);
 router.post("/register", register);
 router.post("/login", login);
-
 module.exports = router;
-

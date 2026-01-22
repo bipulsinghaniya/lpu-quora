@@ -1,56 +1,85 @@
-// import axios from "axios";
-
-// const api = axios.create({
-//   baseURL: "http://localhost:5000/api",
-// });
-
-// api.interceptors.request.use((req) => {
-//   const token = localStorage.getItem("token");
-//   if (token) req.headers.Authorization = `Bearer ${token}`;
-//   return req;
-// });
-
-// export default api;
-
-
-
 
 
 
 // import axios from "axios";
 
 // const api = axios.create({
-//   baseURL: "http://localhost:5000/api"
+//   // baseURL: "http://localhost:5000/api",
+//    baseURL: "https://lpuquora-backend.onrender.com/api",
 // });
 
-// api.interceptors.request.use((req) => {
-//   const token = localStorage.getItem("token");
+// api.interceptors.request.use((config) => {
+//   const auth = JSON.parse(localStorage.getItem("auth"));
+//   const token = auth?.token;
+
 //   if (token) {
-//     req.headers.Authorization = `Bearer ${token}`;
+//     config.headers.Authorization = `Bearer ${token}`;
 //   }
-//   return req;
+
+//   return config;
 // });
 
+
 // export default api;
+
+
+
+
+///// mai 
+
+
+// import axios from "axios";
+
+// const api = axios.create({
+//   baseURL: "http://localhost:5000/api", // 🔥 HARD-CODED LOCAL BACKEND
+//   withCredentials: true,
+// });
+
+
+
+
+// // Attach JWT token if present
+// api.interceptors.request.use(
+//   (config) => {
+//     const auth = JSON.parse(localStorage.getItem("auth"));
+//     const token = auth?.token;
+
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+
+//     return config;
+//   },
+//   (error) => Promise.reject(error)
+// );
+
+// export default api;
+
+
+
+
+
 
 
 import axios from "axios";
 
 const api = axios.create({
-  // baseURL: "http://localhost:5000/api",
-   baseURL: "https://lpuquora-backend.onrender.com/api",
+  baseURL: "https://lpuquora-backend.onrender.com/api", // 🔥 HARD-CODED BACKEND
+  withCredentials: true,
 });
 
-api.interceptors.request.use((config) => {
-  const auth = JSON.parse(localStorage.getItem("auth"));
-  const token = auth?.token;
+api.interceptors.request.use(
+  (config) => {
+    const auth = JSON.parse(localStorage.getItem("auth"));
+    const token = auth?.token;
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
 
-  return config;
-});
-
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 export default api;

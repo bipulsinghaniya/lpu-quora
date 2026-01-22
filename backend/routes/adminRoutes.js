@@ -1,11 +1,3 @@
-// const router = require("express").Router();
-// const admin = require("../middleware/adminMiddleware");
-// const { deleteQuestion, deleteAnswer } = require("../controllers/adminController");
-
-// router.delete("/question/:id", admin, deleteQuestion);
-// router.delete("/answer/:id", admin, deleteAnswer);
-
-// module.exports = router;
 
 
 const router = require("express").Router();

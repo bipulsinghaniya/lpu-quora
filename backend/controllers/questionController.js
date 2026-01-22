@@ -1,24 +1,3 @@
-// const Question = require("../models/Question");
-// const Answer = require("../models/Answer");
-
-// exports.getQuestions = async (req, res) => {
-//   const questions = await Question.find().sort({ createdAt: -1 });
-//   res.json(questions);
-// };
-
-// exports.askQuestion = async (req, res) => {
-//   await Question.create({ ...req.body, userId: req.user._id });
-//   res.send("Question added");
-// };
-
-// exports.addAnswer = async (req, res) => {
-//   await Answer.create({
-//     text: req.body.text,
-//     questionId: req.params.id,
-//     userId: req.user._id
-//   });
-//   res.send("Answer added");
-// };
 
 
 

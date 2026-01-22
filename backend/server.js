@@ -1,3 +1,4 @@
+
 // require("dotenv").config();
 // const express = require("express");
 // const cors = require("cors");
@@ -6,19 +7,25 @@
 // connectDB();
 
 // const app = express();
-// app.use(cors());
+
+// app.use(cors({
+//   origin: "*"
+// }));
 // app.use(express.json());
 
 // app.use("/api/auth", require("./routes/authRoutes"));
 // app.use("/api/questions", require("./routes/questionRoutes"));
 // app.use("/api/admin", require("./routes/adminRoutes"));
 
-// app.listen(process.env.PORT, () =>
-//   console.log("🚀 Server running on port", process.env.PORT)
-// );
+// const PORT = process.env.PORT || 5000;
+
+// app.listen(PORT, () => {
+//   console.log("🚀 Server running on port", PORT);
+// });
 
 
 
+/// mai 
 
 require("dotenv").config();
 const express = require("express");
@@ -29,9 +36,19 @@ connectDB();
 
 const app = express();
 
-app.use(cors({
-  origin: "*"
-}));
+// app.use(cors({
+//   origin: "http://localhost:5173",
+//   credentials: true
+// }));
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
+
+
 app.use(express.json());
 
 app.use("/api/auth", require("./routes/authRoutes"));
@@ -43,4 +60,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log("🚀 Server running on port", PORT);
 });
+
 
