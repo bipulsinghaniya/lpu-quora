@@ -41,7 +41,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://lpuquora-frontend.onrender.com",
+    origin: CLIENT_URL,
     credentials: true,
   })
 );
