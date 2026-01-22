@@ -31,8 +31,6 @@
 
 
 
-
-
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -43,6 +41,9 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
   tls: {
     rejectUnauthorized: false,
   },
@@ -52,26 +53,20 @@ const sendEmail = async (to, link) => {
   console.log("🟡 sendEmail() CALLED");
   console.log("📧 TO:", to);
   console.log("🔗 LINK:", link);
-  console.log("👤 EMAIL_USER:", process.env.EMAIL_USER);
 
   try {
     const info = await transporter.sendMail({
       from: `"LPU Quora" <${process.env.EMAIL_USER}>`,
       to,
       subject: "Verify your email",
-      html: `
-        <h2>Email Verification</h2>
-        <p>Click the link below to verify your email:</p>
-        <a href="${link}">${link}</a>
-        <p>This link expires in 10 minutes.</p>
-      `,
+      html: `<a href="${link}">Verify Email</a>`,
     });
 
     console.log("✅ EMAIL SENT:", info.messageId);
     return info;
   } catch (err) {
-    console.error("❌ NODEMAILER ERROR:", err);
-    throw err; // IMPORTANT: fail registration if mail fails
+    console.error("❌ EMAIL FAILED:", err.message);
+    throw err;
   }
 };
 
