@@ -27,6 +27,8 @@
 
 /// mai 
 
+
+
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -44,6 +46,7 @@ app.use(
   })
 );
 
+app.options("*", cors());
 
 
 
