@@ -117,50 +117,106 @@ const sendEmail = require("../utils/sendEmail");
 /* ======================
    REGISTER
    ====================== */
+// exports.register = async (req, res) => {
+//   try {
+//     const { name, email, password } = req.body;
+
+//     const existingUser = await User.findOne({ email });
+//     // if (existingUser) {
+//     //   return res.status(400).json({ message: "Email is already registered" });
+//     // }
+
+
+//     if (existingUser && existingUser.isVerified) {
+//   return res.status(400).json({ message: "Email is already registered" });
+// }
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     // 🔐 generate token
+//     const emailToken = crypto.randomBytes(32).toString("hex");
+
+//     const user = await User.create({
+//       name,
+//       email,
+//       password: hashedPassword,
+//       isVerified: false,
+//       emailToken,
+//       emailTokenExpiry: Date.now() + 10 * 60 * 1000
+//     });
+
+
+//     const verifyLink = `${process.env.CLIENT_URL}/verify-email/${emailToken}`;
+
+//     await sendEmail(email, verifyLink);
+
+//     res.status(201).json({
+//       message: "Registration successful. Please verify your email."
+//     });
+
+//   } catch (err) {
+//   console.error("REGISTER ERROR 👉", err);
+//   res.status(500).json({
+//     error: err.message
+//   });
+// }
+
+// };
+
+
+
+
+
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const existingUser = await User.findOne({ email });
-    // if (existingUser) {
-    //   return res.status(400).json({ message: "Email is already registered" });
-    // }
+    let user = await User.findOne({ email });
 
-
-    if (existingUser && existingUser.isVerified) {
-  return res.status(400).json({ message: "Email is already registered" });
-}
-
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // 🚫 Case 1: Already verified → block
+    if (user && user.isVerified) {
+      return res.status(400).json({
+        message: "Email is already registered"
+      });
+    }
 
     // 🔐 generate token
     const emailToken = crypto.randomBytes(32).toString("hex");
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      isVerified: false,
-      emailToken,
-      emailTokenExpiry: Date.now() + 10 * 60 * 1000
-    });
-
+    // ♻️ Case 2: Exists but NOT verified → update token
+    if (user && !user.isVerified) {
+      user.emailToken = emailToken;
+      user.emailTokenExpiry = Date.now() + 10 * 60 * 1000;
+      await user.save();
+    } 
+    // 🆕 Case 3: New user
+    else {
+      user = await User.create({
+        name,
+        email,
+        password: hashedPassword,
+        isVerified: false,
+        emailToken,
+        emailTokenExpiry: Date.now() + 10 * 60 * 1000
+      });
+    }
 
     const verifyLink = `${process.env.CLIENT_URL}/verify-email/${emailToken}`;
 
+    // ✅ ALWAYS await
     await sendEmail(email, verifyLink);
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "Registration successful. Please verify your email."
     });
 
   } catch (err) {
-  console.error("REGISTER ERROR 👉", err);
-  res.status(500).json({
-    error: err.message
-  });
-}
-
+    console.error("REGISTER ERROR 👉", err);
+    return res.status(500).json({
+      message: "Registration failed"
+    });
+  }
 };
 
 

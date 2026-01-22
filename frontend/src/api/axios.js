@@ -64,7 +64,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://lpuquora-backend.onrender.com/api", // 🔥 HARD-CODED BACKEND
+  baseURL: "https://lpuquora-backend.onrender.com/api", 
   withCredentials: true,
 });
 
