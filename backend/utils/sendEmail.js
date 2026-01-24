@@ -49,6 +49,16 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+
+// 🔍 ADD THIS BLOCK RIGHT HERE ⬇️
+transporter.verify((err, success) => {
+  if (err) {
+    console.error("SMTP VERIFY FAILED ❌", err.message);
+  } else {
+    console.log("SMTP READY ✅");
+  }
+});
+
 const sendEmail = async (to, link) => {
   console.log("🟡 sendEmail() CALLED");
   console.log("📧 TO:", to);
