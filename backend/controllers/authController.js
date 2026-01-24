@@ -205,11 +205,18 @@ exports.register = async (req, res) => {
     const verifyLink = `${process.env.CLIENT_URL}/verify-email/${emailToken}`;
 
     // ✅ ALWAYS await
-    await sendEmail(email, verifyLink);
+  // ✅ FIXED CODE (put this in authController.js)
+try {
+  await sendEmail(email, verifyLink);
+} catch (emailErr) {
+  console.error("EMAIL ERROR 👉", emailErr.message);
+  // ❗ DO NOT throw error
+}
 
-    return res.status(201).json({
-      message: "Registration successful. Please verify your email."
-    });
+return res.status(201).json({
+  message: "Registration successful. Please verify your email."
+});
+
 
   } catch (err) {
     console.error("REGISTER ERROR 👉", err);
