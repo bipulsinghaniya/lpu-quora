@@ -86,9 +86,6 @@
 
 
 
-
-
-
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -99,15 +96,6 @@ const transporter = nodemailer.createTransport({
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
-});
-
-// Optional but good
-transporter.verify((err) => {
-  if (err) {
-    console.error("SMTP VERIFY FAILED ❌", err.message);
-  } else {
-    console.log("SMTP READY ✅ (Brevo)");
-  }
 });
 
 const sendEmail = async (to, link) => {
