@@ -44,33 +44,33 @@ export default function Register() {
 
 
   // Mai//////////////////////////////////
-  const handleRegister = async () => {
-  setError("");
+  // const handleRegister = async () => {
+  // setError("");
 
-  if (!form.name || !form.email || !form.password) {
-    setError("All fields are required");
-    return;
-  }
+  // if (!form.name || !form.email || !form.password) {
+  //   setError("All fields are required");
+  //   return;
+  // }
 
-  try {
-    setLoading(true);
-    const res = await api.post("/auth/register", form);
+  // try {
+  //   setLoading(true);
+  //   const res = await api.post("/auth/register", form);
 
-    alert(res.data.message); // "Please verify your email"
+  //   alert(res.data.message); // "Please verify your email"
 
  // ✅ Redirect to check-email page
-    navigate("/check-email", {
-      state: { email: form.email }
-    });
+//     navigate("/check-email", {
+//       state: { email: form.email }
+//     });
 
 
-    // STOP HERE
-  } catch (err) {
-    setError(err.response?.data?.message || "Registration failed");
-  } finally {
-    setLoading(false);
-  }
-};
+//     // STOP HERE
+//   } catch (err) {
+//     setError(err.response?.data?.message || "Registration failed");
+//   } finally {
+//     setLoading(false);
+//   }
+// };
 
 ///////////////////
 
