@@ -17,24 +17,24 @@ export default function Register() {
 
 
 
-  // const handleRegister = async () => {
-  //   setError("");
+  const handleRegister = async () => {
+    setError("");
 
-  //   if (!form.name || !form.email || !form.password) {
-  //     setError("All fields are required");
-  //     return;
-  //   }
+    if (!form.name || !form.email || !form.password) {
+      setError("All fields are required");
+      return;
+    }
 
-  //   try {
-  //     setLoading(true);
-  //     await api.post("/auth/register", form);
-  //     navigate("/login");
-  //   } catch (err) {
-  //     setError(err.response?.data?.message || "Registration failed");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+    try {
+      setLoading(true);
+      await api.post("/auth/register", form);
+      navigate("/login");
+    } catch (err) {
+      setError(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
 
