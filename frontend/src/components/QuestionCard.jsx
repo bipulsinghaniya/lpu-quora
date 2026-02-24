@@ -82,7 +82,7 @@ export default function QuestionCard({ q, reload }) {
         />
         <button
           onClick={submitAnswer}
-          className="bg-orange-500 text-white px-3 py-1 rounded text-sm"
+          className="bg-orange-500 text-white px-3 py-1 rounded text-sm cursor-pointer"
         >
           Answer
         </button>

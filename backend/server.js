@@ -39,14 +39,32 @@ connectDB();
 const app = express();
 
 
+// app.use(
+//   cors({
+//     origin: process.env.CLIENT_URL,
+//     credentials: true,
+//   })
+// );
+
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://uninotes-frontend.onrender.com",
+];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
 
-// app.options("*", cors());
 
 
 

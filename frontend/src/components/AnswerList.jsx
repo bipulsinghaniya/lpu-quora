@@ -63,7 +63,7 @@ export default function AnswerList({ answers, reload }) {
           {auth?.user?.role === "admin" && (
             <button
               onClick={() => deleteAnswer(ans._id)}
-              className="text-red-500 text-xs ml-2"
+              className="text-red-500 text-xs ml-2  cursor-pointer"
             >
               Delete
             </button>

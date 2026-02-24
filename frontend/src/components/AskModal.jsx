@@ -49,13 +49,13 @@ export default function AskModal({ open, onClose, reload }) {
         <div className="flex justify-between">
           <button
             onClick={onClose}
-            className="px-4 py-1 bg-gray-300 rounded"
+            className="px-4 py-1 bg-gray-300 rounded  cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={postQuestion}
-            className="px-4 py-1 bg-orange-500 text-white rounded"
+            className="px-4 py-1 bg-orange-500 text-white rounded cursor-pointer"
           >
             Post
           </button>
