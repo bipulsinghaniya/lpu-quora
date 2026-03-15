@@ -96,13 +96,6 @@ JWT_SECRET=your_secret_key
 REDIS_URL=your_redis_connection
 ```
 
-## 📸 Screenshots
-
-* Community Questions page
-* Ask Question feature
-* Answer section
-* Category filtering
-
 ## 👨‍💻 Author
 
 **Bipul Singhaniya**
