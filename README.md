@@ -8,14 +8,15 @@ Frontend: https://lpuquora-frontend.onrender.com
 
 ## 📌 Features
 
-* User Authentication (Register / Login)
-* JWT-based secure authentication
-* Ask questions
-* Answer questions
-* Category-based filtering (Exams, Hostel, Events)
-* Search questions
-* Community discussion interface
-* Responsive UI
+- User Authentication (Register / Login)
+- JWT-based secure authentication
+- Secure logout using Redis token blacklist
+- Ask questions
+- Answer questions
+- Category-based filtering (Exams, Hostel, Events)
+- Search questions
+- Community discussion interface
+- Responsive UI
 
 ## 🛠️ Tech Stack
 
