@@ -4,6 +4,7 @@ import api from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import LpuCampus from "./lpupic.jpg";
 
+
 export default function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -17,62 +18,61 @@ export default function Register() {
 
 
 
-  const handleRegister = async () => {
-    setError("");
-
-    if (!form.name || !form.email || !form.password) {
-      setError("All fields are required");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await api.post("/auth/register", form);
-      navigate("/login");
-    } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-
-
-
-
-
-
-  // Mai//////////////////////////////////
   // const handleRegister = async () => {
-  // setError("");
+  //   setError("");
 
-  // if (!form.name || !form.email || !form.password) {
-  //   setError("All fields are required");
-  //   return;
-  // }
+  //   if (!form.name || !form.email || !form.password) {
+  //     setError("All fields are required");
+  //     return;
+  //   }
 
-  // try {
-  //   setLoading(true);
-  //   const res = await api.post("/auth/register", form);
+  //   try {
+  //     setLoading(true);
+  //     await api.post("/auth/register", form);
+  //     navigate("/login");
+  //   } catch (err) {
+  //     setError(err.response?.data?.message || "Registration failed");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  //   alert(res.data.message); // "Please verify your email"
-
- // ✅ Redirect to check-email page
-//     navigate("/check-email", {
-//       state: { email: form.email }
-//     });
 
 
-//     // STOP HERE
-//   } catch (err) {
-//     setError(err.response?.data?.message || "Registration failed");
-//   } finally {
-//     setLoading(false);
-//   }
-// };
+  /// otp
 
-///////////////////
+  const handleRegister = async () => {
+  setError("");
+
+  if (!form.name || !form.email || !form.password) {
+    setError("All fields are required");
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const res = await api.post("/auth/register", form);
+
+    // show message (OTP sent)
+    alert(res.data.message);
+
+    // 👉 go to OTP verification page
+    navigate("/verify-email", {
+      state: { email: form.email }
+    });
+
+  } catch (err) {
+    setError(err.response?.data?.message || "Registration failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
+
+
 
 
 
