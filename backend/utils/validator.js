@@ -52,6 +52,9 @@ exports.questionValidator = [
   handleValidation
 ];
 
+
+
+
 exports.answerValidator = [
   body("text")
     .notEmpty().withMessage("Answer text is required")
