@@ -395,12 +395,14 @@ export default function VerifyEmail() {
                 e.target.style.transform = "translateY(0)";
               }}
               onClick={handleVerify}
-            >
+         >
               Verify
             </button>
           </div>
 
-          {/* Error */}
+
+
+         
           {error && (
             <div style={S.errorBox}>
               <span>⚠️</span>
