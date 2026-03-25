@@ -92,7 +92,6 @@ exports.login = async (req, res) => {
 };
 
 
-// otp
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -182,7 +181,6 @@ await redisClient.set(`otp_cooldown:${email}`, "1", { EX: 30 });
 exports.verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
-
     const data = await redisClient.get(`otp:${email}`);
 
     if (!data) {

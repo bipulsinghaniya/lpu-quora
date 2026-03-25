@@ -11,15 +11,6 @@ export function AuthProvider({ children }) {
     JSON.parse(localStorage.getItem("auth")) || null
   );
 
-  // const login = async (email, password) => {
-  //   const res = await api.post("/auth/login", {
-  //     email,
-  //     password,
-  //   });
-
-  //   setAuth(res.data);
-  //   localStorage.setItem("auth", JSON.stringify(res.data));
-  // };
 
 
 
