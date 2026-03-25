@@ -20,7 +20,7 @@ export default function App() {
 
 
      <Route path="/check-email" element={<CheckEmail />} />
-<Route path="/verify-email" element={<VerifyEmail />} />
+     <Route path="/verify-email" element={<VerifyEmail />} />
 
 
       <Route path="/" element={

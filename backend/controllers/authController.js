@@ -1,11 +1,8 @@
-
-
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendEmail");
-const redisClient = require("../config/redis"); // ❗ also add this at top if missing
-
+const redisClient = require("../config/redis"); 
 
 
 /* ======================
@@ -115,6 +112,8 @@ exports.register = async (req, res) => {
       });
     }
 
+
+    
     // 🔹 3. Prevent multiple OTP requests
  const cooldown = await redisClient.get(`otp_cooldown:${email}`);
 

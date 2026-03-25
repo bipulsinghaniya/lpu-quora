@@ -129,7 +129,7 @@ export default function Register() {
 
             {/* Sign In Button */}
             <Link to="/login">
-              <button className="bg-white text-orange-600 font-bold py-4 px-12 rounded-2xl hover:bg-orange-50 transform transition-all duration-300 hover:scale-105 shadow-2xl text-lg animate-slideUp" style={{ animationDelay: '0.4s' }}>
+              <button className="bg-white text-orange-600  cursor-pointer font-bold py-4 px-12 rounded-2xl hover:bg-orange-50 transform transition-all duration-300 hover:scale-105 shadow-2xl text-lg animate-slideUp" style={{ animationDelay: '0.4s' }}>
                 SIGN IN
               </button>
             </Link>
@@ -259,7 +259,7 @@ export default function Register() {
             <button
               onClick={handleRegister}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-4 rounded-2xl transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
+              className="w-full bg-gradient-to-r cursor-pointer from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 px-4 rounded-2xl transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
             >
               {loading ? (
                 <>
