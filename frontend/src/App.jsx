@@ -1,7 +1,4 @@
 
-
-//mai
-
 import { Routes, Route } from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
