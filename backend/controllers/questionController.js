@@ -1,6 +1,3 @@
-
-
-
 const Question = require("../models/Question");
 const Answer = require("../models/Answer");
 
@@ -18,12 +15,25 @@ exports.getQuestions = async (req, res) => {
     const questionIds = questions.map(q => q._id);
 
     // 3️⃣ Get all answers related to those questions (latest first)
-    const answers = await Answer.find({
-      questionId: { $in: questionIds }
-    }).sort({ createdAt: -1 });
+    // const answers = await Answer.find({
+    //   questionId: { $in: questionIds }
+    // }).sort({ createdAt: -1 });
+
+
+    // 3️⃣ Get all answers related to those questions (latest first)
+const answers = await Answer.find({
+  questionId: { $in: questionIds }
+})
+.populate("userId", "name")
+.sort({ createdAt: -1 });
+
+
+
+
 
     // 4️⃣ Group answers by questionId
     const answerMap = {};
+    
     answers.forEach(ans => {
       const qid = ans.questionId.toString();
       if (!answerMap[qid]) answerMap[qid] = [];
@@ -43,6 +53,8 @@ exports.getQuestions = async (req, res) => {
   }
 };
 
+
+
 /* =========================
    ADD QUESTION
    ========================= */
@@ -54,6 +66,7 @@ exports.askQuestion = async (req, res) => {
 
   res.send("Question added");
 };
+
 
 /* =========================
    ADD ANSWER

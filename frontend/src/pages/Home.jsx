@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 import Navbar from "../components/Navbar";
@@ -13,6 +6,7 @@ import QuestionCard from "../components/QuestionCard";
 import AskModal from "../components/AskModal";
 
 export default function Home() {
+  
   const [questions, setQuestions] = useState([]);
   const [tab, setTab] = useState("all");
   const [open, setOpen] = useState(false);
@@ -29,9 +23,7 @@ export default function Home() {
 
   const filtered = questions.filter((q) => {
     const matchTag = tab === "all" || q.tag === tab;
-    const matchSearch =
-      q.title.toLowerCase().includes(search.toLowerCase()) ||
-      q.desc.toLowerCase().includes(search.toLowerCase());
+    const matchSearch = q.title.toLowerCase().includes(search.toLowerCase()) || q.desc.toLowerCase().includes(search.toLowerCase());
     return matchTag && matchSearch;
   });
 
@@ -66,6 +58,8 @@ export default function Home() {
             </p>
           </div>
         )}
+
+
 
         <div className="space-y-5">
           {filtered.map((q) => (
