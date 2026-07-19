@@ -40,8 +40,23 @@ const login = async (email, password) => {
     localStorage.removeItem("auth");
   };
 
+  const forgotPassword = async (email) => {
+    const res = await api.post("/auth/forgot-password", { email });
+    return res.data;
+  };
+
+  const verifyResetOtp = async (email, otp) => {
+    const res = await api.post("/auth/verify-reset-otp", { email, otp });
+    return res.data;
+  };
+
+  const resetPassword = async (email, resetToken, newPassword, confirmPassword) => {
+    const res = await api.post("/auth/reset-password", { email, resetToken, newPassword, confirmPassword });
+    return res.data;
+  };
+
   return (
-    <AuthContext.Provider value={{ auth, login, googleLogin, logout }}>
+    <AuthContext.Provider value={{ auth, login, googleLogin, logout, forgotPassword, verifyResetOtp, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );

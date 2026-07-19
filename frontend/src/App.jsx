@@ -7,7 +7,9 @@ import AdminPanel from "./pages/AdminPanel";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import CheckEmail from "./pages/CheckEmail";
 import VerifyEmail from "./pages/VerifyEmail";
-
+import ForgotPassword from "./auth/ForgotPassword";
+import VerifyResetOtp from "./auth/VerifyResetOtp";
+import ResetPassword from "./auth/ResetPassword";
 
 export default function App() {
   return (
@@ -19,7 +21,9 @@ export default function App() {
      <Route path="/check-email" element={<CheckEmail />} />
      <Route path="/verify-email" element={<VerifyEmail />} />
 
-
+     <Route path="/forgot-password" element={<ForgotPassword />} />
+     <Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
+     <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/" element={
         <ProtectedRoute>
           <Home />

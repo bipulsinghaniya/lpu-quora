@@ -157,9 +157,9 @@ export default function Login() {
 
             {/* Forgot Password */}
             <div className="text-right">
-              <a href="#" className="text-orange-600 hover:text-orange-700 font-medium text-sm hover:underline transition-all">
+              <Link to="/forgot-password" className="text-orange-600 hover:text-orange-700 font-medium text-sm hover:underline transition-all">
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
             {/* Sign In Button */}
