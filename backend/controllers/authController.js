@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendEmail");
 const redisClient = require("../config/redis"); 
-
+const crypto = require("crypto");
 
 /* ======================
    REGISTER
@@ -291,5 +291,147 @@ exports.googleAuth = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(401).json({ message: 'Invalid Google Token' });
+  }
+};
+
+/* ======================
+   FORGOT PASSWORD
+   ====================== */
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      // Return 200 to prevent email enumeration
+      return res.status(200).json({ message: "If that email is in our database, we will send a password reset OTP." });
+    }
+
+    if (user.authProvider === 'google') {
+      return res.status(400).json({ message: "This account was created with Google. Please log in with Google." });
+    }
+
+    // Cooldown check
+    const cooldownKey = `reset_cooldown:${email}`;
+    const cooldown = await redisClient.get(cooldownKey);
+    if (cooldown) {
+      return res.status(429).json({ message: "Please wait 60 seconds before requesting again" });
+    }
+    await redisClient.set(cooldownKey, "1", { EX: 60 });
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const hashedOtp = crypto.createHash("sha256").update(otp).digest("hex");
+
+    // Store hashed OTP in Redis with 10 mins expiry
+    await redisClient.set(`password-reset-otp:${email}`, hashedOtp, { EX: 600 });
+    
+    // Attempt tracking
+    await redisClient.del(`reset_attempts:${email}`);
+
+    await sendEmail({
+      email,
+      subject: "Password Reset OTP",
+      html: `
+        <div style="font-family:sans-serif; max-width:400px; margin:auto; padding:20px;">
+          <h2>LPU Quora - Password Reset</h2>
+          <p>Your password reset OTP is:</p>
+          <h1 style="text-align:center;">${otp}</h1>
+          <p>This OTP is valid for 10 minutes. If you did not request a password reset, please ignore this email.</p>
+        </div>
+      `,
+    });
+
+    res.status(200).json({ message: "If that email is in our database, we will send a password reset OTP." });
+  } catch (err) {
+    console.error("Forgot password error:", err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+exports.verifyResetOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Email and OTP are required" });
+    }
+
+    const attemptsKey = `reset_attempts:${email}`;
+    const attempts = await redisClient.incr(attemptsKey);
+    if (attempts === 1) {
+      await redisClient.expire(attemptsKey, 600); // 10 mins window
+    }
+    if (attempts > 5) {
+      return res.status(429).json({ message: "Too many failed attempts. Please request a new OTP later." });
+    }
+
+    const storedHashedOtp = await redisClient.get(`password-reset-otp:${email}`);
+    if (!storedHashedOtp) {
+      return res.status(400).json({ message: "OTP expired or not found" });
+    }
+
+    const inputHashedOtp = crypto.createHash("sha256").update(otp).digest("hex");
+    if (storedHashedOtp !== inputHashedOtp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    // OTP verified successfully
+    await redisClient.del(`password-reset-otp:${email}`);
+    await redisClient.del(attemptsKey);
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const hashedResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+
+    await redisClient.set(`password-reset-token:${email}`, hashedResetToken, { EX: 900 }); // 15 mins
+
+    res.status(200).json({
+      message: "OTP verified successfully",
+      resetToken,
+    });
+  } catch (err) {
+    console.error("Verify reset OTP error:", err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { email, resetToken, newPassword, confirmPassword } = req.body;
+
+    if (!email || !resetToken || !newPassword || !confirmPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    const storedHashedToken = await redisClient.get(`password-reset-token:${email}`);
+    if (!storedHashedToken) {
+      return res.status(400).json({ message: "Invalid or expired reset token" });
+    }
+
+    const inputHashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    if (storedHashedToken !== inputHashedToken) {
+      return res.status(400).json({ message: "Invalid reset token" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    await redisClient.del(`password-reset-token:${email}`);
+
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (err) {
+    console.error("Reset password error:", err);
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
