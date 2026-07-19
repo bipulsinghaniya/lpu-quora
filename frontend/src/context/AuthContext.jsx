@@ -25,13 +25,23 @@ const login = async (email, password) => {
 };
 
 
+  const googleLogin = async (token) => {
+    const res = await api.post("/auth/google", { token });
+    const data = {
+      token: res.data.token,
+      user: res.data.user,
+    };
+    localStorage.setItem("auth", JSON.stringify(data));
+    setAuth(data);
+  };
+
   const logout = () => {
     setAuth(null);
     localStorage.removeItem("auth");
   };
 
   return (
-    <AuthContext.Provider value={{ auth, login, logout }}>
+    <AuthContext.Provider value={{ auth, login, googleLogin, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,11 +1,14 @@
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import api from "../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import LpuCampus from "./lpupic.jpg";
+import { AuthContext } from "../context/AuthContext";
+import { GoogleLogin } from "@react-oauth/google";
 
 
 export default function Register() {
+  const { googleLogin } = useContext(AuthContext);
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
@@ -75,6 +78,18 @@ export default function Register() {
 
 
 
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      setLoading(true);
+      await googleLogin(credentialResponse.credential);
+      navigate("/", { replace: true });
+    } catch (err) {
+      setError("Google authentication failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -274,15 +289,27 @@ export default function Register() {
               )}
             </button>
 
+            {/* Google Login Divider */}
+            <div className="flex items-center my-6">
+              <div className="flex-1 border-t border-gray-300"></div>
+              <span className="px-4 text-gray-500 text-sm font-medium">OR</span>
+              <div className="flex-1 border-t border-gray-300"></div>
+            </div>
+
+            {/* Google Login Button */}
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setError('Google authentication was unsuccessful')}
+                useOneTap={false}
+                text="signup_with"
+              />
+            </div>
 
                 {/* // mai  */}
-                <p className="text-sm text-gray-600 text-center">
+                <p className="text-sm text-gray-600 text-center mt-6">
   After registration, please check your email to verify your account.
 </p>
-
-
-
-
           </div>
 
           {/* Sign In Link */}

@@ -2,10 +2,11 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import LpuCampus from "./lpupic.jpg";
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function Login() {
 
-  const { login } = useContext(AuthContext);
+  const { login, googleLogin } = useContext(AuthContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,6 +39,18 @@ export default function Login() {
 
     
     finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      setLoading(true);
+      await googleLogin(credentialResponse.credential);
+      navigate("/", { replace: true });
+    } catch (err) {
+      setError("Google authentication failed");
+    } finally {
       setLoading(false);
     }
   };
@@ -167,6 +180,23 @@ export default function Login() {
                 'SIGN IN'
               )}
             </button>
+
+            {/* Google Login Divider */}
+            <div className="flex items-center my-6">
+              <div className="flex-1 border-t border-gray-300"></div>
+              <span className="px-4 text-gray-500 text-sm font-medium">OR</span>
+              <div className="flex-1 border-t border-gray-300"></div>
+            </div>
+
+            {/* Google Login Button */}
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setError('Google authentication was unsuccessful')}
+                useOneTap={false}
+                text="continue_with"
+              />
+            </div>
           </div>
         </div>
       </div>
